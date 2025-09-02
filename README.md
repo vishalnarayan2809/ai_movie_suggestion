@@ -8,7 +8,7 @@ PopChoice is an intelligent movie recommendation application that leverages cutt
 - **AI-Powered Analysis**: Uses Groq's advanced language models for intelligent content analysis
 - **Vector Similarity Search**: Employs vector embeddings for semantic movie matching
 - **Real-time Processing**: Instant recommendations based on user input
-- **Modern UI**: Clean, responsive interface with intuitive user experience
+- **Modern UI**: Updated with a glassmorphic design and fluid animations using Framer Motion.
 - **Structured Prompt Engineering**: Layered system/instruction/user messages with guardrails + JSON schema targeting
 - **Open Source Embeddings**: Nomic as an open, cost-efficient alternative to closed models (OpenAI) while retaining high semantic fidelity
 - **Deterministic JSON Output**: AI forced to emit machine-parseable JSON powering UI state
@@ -16,13 +16,16 @@ PopChoice is an intelligent movie recommendation application that leverages cutt
 - **Robust State Management**: Co-located slices + derived selectors minimize re-renders
 - **Route-Aware Data Lifecycle**: React Router + lazy segments + suspense boundaries
 
-## ✨ What's New in v3
+## 📸 Screenshots
 
-- **Multi-Step Form**: A new multi-step form has been introduced to guide users through the recommendation process, improving user experience.
-- **Secondary Questions**: Added a secondary form to ask users about their preferences for movie era (new or classic) and mood.
-- **Refined AI Prompts**: The prompts sent to the AI have been updated to include the new user inputs, resulting in more personalized and accurate recommendations.
-- **UI Enhancements**: The user interface has been updated to support the new multi-step form and provide a smoother workflow.
-- **State Management**: The application's state management has been updated to handle the data from the new form fields.
+![Main Screen](src/assets/Screenshot%202025-09-02%20162522.png)
+*Initial screen to get user's favorite movie.*
+
+![Second Screen](src/assets/Screenshot%202025-09-02%20162617.png)
+*Follow-up questions to refine recommendations.*
+
+![Results Screen](src/assets/Screenshot%202025-09-02%20162644.png)
+*AI-powered movie recommendations.*
 
 ## 🛠️ Tech Stack
 
