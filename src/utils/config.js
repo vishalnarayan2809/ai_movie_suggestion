@@ -67,42 +67,50 @@ export  async function getEmbedding(text) {
   })
 
 
-export async function getAIResponse (formData){
-        try {
-          const userQuery = Object.values(formData).join(' ');
-          const [userEmbedding] = await getEmbedding([userQuery]);
-          const { data, error } = await supabase.rpc('match_movies',{
-            query_embedding: userEmbedding,
-            match_threshold: 0.50,
-            match_count: 3
-          });
-          if (error) {
-            console.error('match_documents error:', error);
-          } else {
-            const formattedData = data.map(obj => obj.content).join(',')
-            console.log(formattedData)
-            const userInterests = `The users favourite movie and why it is their favorite:${formData.favourite_movie},The user is in the mood to watch something:${formData.genre},The user is feeling and in the mindset to watch something:${formData.mood} `
-            const messages =[
-              {
-                role: "user",
-                content: `Content: ${formattedData} UserInterestString: ${userInterests}`
-              },{
-                role: 'system',
-            content: `You are an enthusiastic movies expert who loves recommending movies to people. You will be given two pieces of information - some context about moviess episodes UserInterestString. Your main job is to formulate a short answer to the UserInterestString using the provided context. Make sure to provide the closest answer to the query .If you are unsure and cannot find the answer in the context, say, If the context has anything related to the Query do suggest the user that do not directly say i dont know "Sorry, I don't know the answer." Please do not make up the answer.` 
-
-              }
-            ]
-           const ai_response = await groq.chat.completions.create({
-              model:"openai/gpt-oss-120b",
-              messages:messages,
-              temperature:0.5,
-              frequency_penalty:0.5
-            })
-            const text = ai_response.choices?.[0]?.message?.content || '';
-            console.log(text)
-            return text;
-          }
-        } catch(e){
-          console.error('Unexpected:', e);
+// ...existing code...
+export async function getAIResponse (userQuery){
+  try {
+    const [userEmbedding] = await getEmbedding([userQuery]);
+    const { data, error } = await supabase.rpc('match_movies',{
+      query_embedding: userEmbedding,
+      match_threshold: 0.50,
+      match_count: 3
+    });
+    if (error) {
+      console.error('match_documents error:', error);
+    } else {
+      const formattedData = data.map(obj => obj.content).join(',');
+      const userInterests = `${userQuery}`;
+      const messages = [
+        {
+          role: 'system',
+          content: `You are an enthusiastic movies expert.
+Return ONLY a valid JSON array of exactly 3 objects.
+Each object MUST have:
+  "movie_name": string
+  "choice_reason": string
+No extra commentary, no backticks.
+Example:
+[{"movie_name":"Inception","choice_reason":"High-concept thriller that fits X"},
+ {"movie_name":"Amelie","choice_reason":"Whimsical tone for Y"},
+ {"movie_name":"Spirited Away","choice_reason":"Blend of wonder and depth"}]`
+        },
+        {
+          role: "user",
+          content: `Context: ${formattedData}\nUserInterestString: ${userInterests}`
         }
-      }
+      ];
+      const ai_response = await groq.chat.completions.create({
+        model:"openai/gpt-oss-120b",
+        messages,
+        temperature:0.4,
+        frequency_penalty:0.3
+      });
+      const text = (ai_response.choices?.[0]?.message?.content || '').trim();
+      return text;
+    }
+  } catch(e){
+    console.error('Unexpected:', e);
+  }
+}
+// ...existing code...

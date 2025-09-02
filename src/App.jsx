@@ -1,39 +1,52 @@
 import { useState,useEffect } from 'react'
 import './index.css'
-import QuestionForm  from './components/QuestionForm'
+import InitialForm  from './components/InitialForm.jsx'
 import ResultPage from './components/ResultPage.jsx'
-import { getAIResponse } from './utils/config.js'
+import SecondaryForm from './components/SecondaryForm.jsx'
+import { getAIResponse , Setup} from './utils/config.js'
+import { RouterProvider,createBrowserRouter,createRoutesFromElements,Route } from 'react-router-dom'
+
 
 function App() {
+ 
+  const[mainInfo,setMainInfo] = useState({})
+  const[personalizedInfo,setPersonalizedInfo] = useState([])
 
-
-
-  const[formData,setFormData] = useState(null)
-  const[result,setResult] = useState(null)
-  const [loading,setLoading] = useState(false)
-  
-  const Reset = ()=>{
-    setFormData(null)
-    setResult(null)
+  console.log(mainInfo,personalizedInfo)
+   const Reset = ()=>{
+    setMainInfo({});
+    setPersonalizedInfo([]);
   }
-  
-    useEffect(()=>{
-    if(formData){
-      (async ()=>{
-        setLoading(true);
-        const answer = await getAIResponse(formData);
-        setResult(answer);
-        setLoading(false);
-      })();
-    }
-  },[formData])
 
+  const router = createBrowserRouter(createRoutesFromElements(
+   <>
+     <Route path='/' 
+     element={<InitialForm  
+     func={setMainInfo} />}/>
+    <Route path='/form2' 
+    element={<SecondaryForm
+      personalizedInfo={personalizedInfo} 
+    mainInfo={mainInfo} 
+    func2={setMainInfo} 
+    func={setPersonalizedInfo} 
+    />}
+
+    />
+    <Route
+    
+    path='/result'
+    element={<ResultPage 
+    func={Reset}
+    personalizedInfo={personalizedInfo}
+    mainInfo={mainInfo}
+    />}/>
+    </>
+    
+  ))
   return (
     <>
     <main>
-      {loading && !result && <h2>Loading...</h2>}
-      {!loading && result && <ResultPage result={result} func={Reset} />}
-      {!loading && !result && <QuestionForm func={setFormData} />}
+      {<RouterProvider router={router}/>}
     </main>
     </>
   )
