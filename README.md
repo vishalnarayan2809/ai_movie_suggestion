@@ -16,6 +16,14 @@ PopChoice is an intelligent movie recommendation application that leverages cutt
 - **Robust State Management**: Co-located slices + derived selectors minimize re-renders
 - **Route-Aware Data Lifecycle**: React Router + lazy segments + suspense boundaries
 
+## ✨ What's New in v3
+
+- **Multi-Step Form**: A new multi-step form has been introduced to guide users through the recommendation process, improving user experience.
+- **Secondary Questions**: Added a secondary form to ask users about their preferences for movie era (new or classic) and mood.
+- **Refined AI Prompts**: The prompts sent to the AI have been updated to include the new user inputs, resulting in more personalized and accurate recommendations.
+- **UI Enhancements**: The user interface has been updated to support the new multi-step form and provide a smoother workflow.
+- **State Management**: The application's state management has been updated to handle the data from the new form fields.
+
 ## 🛠️ Tech Stack
 
 ### Frontend
